@@ -1,42 +1,35 @@
 class BankAccount {
-    constructor (balance=0) {
-        this.balance = balance;
+    #balance;
+
+    constructor (balance = 0) {
+        this.#balance = balance;
     }
     
     deposit(sum) {
-        try {
-            if (sum <= 0) {
-                throw new Error('Pul kiritmadingiz');
-            } else {
-                this.balance += sum;
-                console.log('Pul tushdi');
-            };
-        } catch (err) {
-            console.log(err.name,err.message);
-        };
-    };
+        if (sum <= 0) {
+            throw new Error('Pul kiritmadingiz yoki noto`g`ri summa');
+        }
+        this.#balance += sum;
+        console.log(`Pul tushdi: +${sum}`);
+    }
     
     withdraw(sum) {
-        try {
-            if (sum > this.balance) {
-                throw new Error('Mablag yetarli emas');
-            } else {
-                this.balance -= sum;
-                console.log(`${sum}sum Pul yechildi; qolgan pul ${this.balance}sum`);
-            };
-        } catch (err) {
-            console.log(err.name,err.message)
+        if (sum > this.#balance) {
+            throw new Error('Mablag` yetarli emas');
         }
+        this.#balance -= sum;
+        console.log(`${sum} sum pul yechildi.`);
     }
-    
     getBalance() {
-        return `${this.balance}sum`;
+        return this.#balance;
     }
 }
-
-const a = new BankAccount()
-
-a.deposit(1000)
-console.log(a.getBalance())
-
-a.withdraw(90)
+try {
+    const acc = new BankAccount(100);
+    acc.deposit(50); 
+    console.log("Balans:", acc.getBalance());
+    
+    acc.withdraw(30);
+} catch (err) {
+    console.log(`${err.name}: ${err.message}`);
+}
